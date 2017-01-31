@@ -1,0 +1,46 @@
+version: '2'
+services:
+  web:
+    image: jwilder/nginx-proxy:latest
+    links:
+      - app
+    ports:
+      - "8080:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    environment:
+      TEST: TEST
+
+  app:
+    #build: .
+    image: bkosickorg/node-express-mongoose-demo:latest
+    links:
+      - mongo
+    ports:
+      - "3001:3001"
+#    volumes:
+#     - ./app:/home/mean/app
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+      MONGOHQ_URL: "mongodb://mongo/noobjs"
+      FACEBOOK_CLIENTID: ID
+      FACEBOOK_SECRET: SECRET
+      LINKEDIN_CLIENTID: ID
+      LINKEDIN_SECRET: SECRET
+      GOOGLE_CLIENTID: ID
+      GOOGLE_SECRET: SECRET
+      TWITTER_CLIENTID: ID
+      TWITTER_SECRET: SECRET
+      GITHUB_CLIENTID: ID
+      GITHUB_SECRET: SECRET
+      IMAGER_S3_KEY: AWS_S3_KEY
+      IMAGER_S3_SECRET: AWS_S3_SECRET
+      IMAGER_S3_BUCKET: AWS_S3_BUCKET
+      VIRTUAL_HOST: externalhostname.example.com
+      VIRTUAL_PORT: 3001
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
